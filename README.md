@@ -10,3 +10,10 @@ Dit is op dit moment nog een nieuw (default) Cordova project, aangemaakt met het
 ```
 cordova create mi3Cordova18 net.ophalvens.mi3Cordova2018 CordovaVB2018
 ```
+## Stap 2
+
+Voeg het platform android toe aan het project :
+
+```
+cordova flatform add android
+```
