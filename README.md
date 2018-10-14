@@ -7,5 +7,6 @@ Download deze branch of fork de repository om te starten.
 
 Dit is op dit moment nog een nieuw (default) Cordova project, aangemaakt met het commando :
 
-```cordova create mi3Cordova18 net.ophalvens.mi3Cordova2018 CordovaVB2018
+```
+cordova create mi3Cordova18 net.ophalvens.mi3Cordova2018 CordovaVB2018
 ```
