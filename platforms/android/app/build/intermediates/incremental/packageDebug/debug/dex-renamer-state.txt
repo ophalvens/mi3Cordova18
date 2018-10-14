@@ -1,0 +1,4 @@
+#Mon Oct 15 01:09:36 CEST 2018
+base.0=C\:\\dev\\projecten\\mi3Cordova2018\\mi3Cordova18\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+path.0=classes.dex
+renamed.0=classes.dex
