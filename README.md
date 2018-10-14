@@ -15,5 +15,5 @@ cordova create mi3Cordova18 net.ophalvens.mi3Cordova2018 CordovaVB2018
 Voeg het platform android toe aan het project :
 
 ```
-cordova flatform add android
+cordova platform add android
 ```
