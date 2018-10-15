@@ -2,7 +2,7 @@
 /*global navigator, Dom7, document, Framework7, routes*/
 //jshint esnext:true
 // opgelet: app = cordova initialisatie
-//          myApp : F7 initialisatie
+//          myApp = F7 initialisatie
 
 var app = {
     // Application Constructor
@@ -40,7 +40,7 @@ if (document.location.search.indexOf('theme=') >= 0) {
 
 // Init myApp
 var myApp = new Framework7({
-    id: 'be.odisee.mi2.exep2',
+    id: 'net.ophalvens.mi3Cordova2018',
     root: '#app',
     theme: theme,
     routes: routes,
@@ -61,7 +61,7 @@ var myApp = new Framework7({
 function getLocation() {
     
     if (navigator.geolocation) {
-        var fast = $$("#cbPosAccurate").prop("checked");
+        var accurate = $$("#cbPosAccurate").prop("checked");
         if(app.watchPositionID !== null){
             // de vorige watch eerst stoppen, of we hebben meerdere
             // simultane lopen.
@@ -73,8 +73,9 @@ function getLocation() {
             showPosition,
             positionError, 
             { 
-                enableHighAccuracy: fast,
-                maximumAge: 10 * 1000}
+                enableHighAccuracy: accurate,
+                maximumAge: 10 * 1000
+            }
         );
         
     } else {
@@ -110,7 +111,7 @@ function positionError(error) {
     switch(error.code){
         case 0:
             // unknown error
-             myApp.alert('Onbekend probleem bij het bepalen van je positie. Zorg er voor dat de positiebepaling van je toestel actief is.', 'Positie probleem');
+            myApp.alert('Onbekend probleem bij het bepalen van je positie. Zorg er voor dat de positiebepaling van je toestel actief is.', 'Positie probleem');
         case 1:
             // permission denied
             myApp.alert('Het spijt me, maar ik ga je moeten blijven pesten als je geen toestemming geeft om je positie te zien. Als je wilt, kan je de pagina herladen en eventueel de geschiedenis van je browser wissen. Het laatste uur is meer dan voldoende. <b>iPhone</b> : zorg er voor dat je locatie toestemming in het algemeen EN locatie toestemming aan Safari geeft.', 'Positie toelating probleem');
