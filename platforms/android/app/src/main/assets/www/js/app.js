@@ -2,7 +2,7 @@
 /*global navigator, Dom7, document, Framework7, routes*/
 //jshint esnext:true
 // opgelet: app = cordova initialisatie
-//          myApp : F7 initialisatie
+//          myApp = F7 initialisatie
 
 var app = {
     // Application Constructor
@@ -40,7 +40,7 @@ if (document.location.search.indexOf('theme=') >= 0) {
 
 // Init myApp
 var myApp = new Framework7({
-    id: 'be.odisee.mi2.exep2',
+    id: 'net.ophalvens.mi3Cordova2018',
     root: '#app',
     theme: theme,
     routes: routes,
@@ -51,6 +51,12 @@ var myApp = new Framework7({
                     getLocation();
                 });
             } 
+            if (page.route.name === "data") {
+                getList();
+                $$('#btnVoegToe').on('click', function () {
+                    voegToe();
+                });
+            }
 
         }
     }
@@ -61,7 +67,7 @@ var myApp = new Framework7({
 function getLocation() {
     
     if (navigator.geolocation) {
-        var fast = $$("#cbPosAccurate").prop("checked");
+        var accurate = $$("#cbPosAccurate").prop("checked");
         if(app.watchPositionID !== null){
             // de vorige watch eerst stoppen, of we hebben meerdere
             // simultane lopen.
@@ -73,12 +79,13 @@ function getLocation() {
             showPosition,
             positionError, 
             { 
-                enableHighAccuracy: fast,
-                maximumAge: 10 * 1000}
+                enableHighAccuracy: accurate,
+                maximumAge: 10 * 1000
+            }
         );
         
     } else {
-       myApp.alert('Het spijt me, maar geolocatie wordt niet ondersteund door deze browser.', 'Geen geolocatie ondersteuning');
+       myApp.dialog.alert('Het spijt me, maar geolocatie wordt niet ondersteund door deze browser.', 'Geen geolocatie ondersteuning');
     }
 }
 function showPosition(position) {
@@ -110,17 +117,139 @@ function positionError(error) {
     switch(error.code){
         case 0:
             // unknown error
-             myApp.alert('Onbekend probleem bij het bepalen van je positie. Zorg er voor dat de positiebepaling van je toestel actief is.', 'Positie probleem');
+            myApp.dialog.alert('Onbekend probleem bij het bepalen van je positie. Zorg er voor dat de positiebepaling van je toestel actief is.', 'Positie probleem');
         case 1:
             // permission denied
-            myApp.alert('Het spijt me, maar ik ga je moeten blijven pesten als je geen toestemming geeft om je positie te zien. Als je wilt, kan je de pagina herladen en eventueel de geschiedenis van je browser wissen. Het laatste uur is meer dan voldoende. <b>iPhone</b> : zorg er voor dat je locatie toestemming in het algemeen EN locatie toestemming aan Safari geeft.', 'Positie toelating probleem');
+            myApp.dialog.alert('Het spijt me, maar ik ga je moeten blijven pesten als je geen toestemming geeft om je positie te zien. Als je wilt, kan je de pagina herladen en eventueel de geschiedenis van je browser wissen. Het laatste uur is meer dan voldoende. <b>iPhone</b> : zorg er voor dat je locatie toestemming in het algemeen EN locatie toestemming aan Safari geeft.', 'Positie toelating probleem');
         case 2:
             // position unavailable (error response from location provider)
-            myApp.alert('Je positie is niet beschikbaar. Zorg er voor dat de positiebepaling van je toestel actief is.', 'Positie niet beschikbaar');
+            myApp.dialog.alert('Je positie is niet beschikbaar. Zorg er voor dat de positiebepaling van je toestel actief is.', 'Positie niet beschikbaar');
         case 3:
             // timed out
-            myApp.alert('Het duurt te lang om je positie te vinden. Zit je in een tunnel? Of zit je nog in de school? Op een heel aantal toestellen kan de positie sneller bepaald worden als je ook je wifi aanzet.', 'Positie timeout');
+            myApp.dialog.alert('Het duurt te lang om je positie te vinden. Zit je in een tunnel? Of zit je nog in de school? Op een heel aantal toestellen kan de positie sneller bepaald worden als je ook je wifi aanzet.', 'Positie timeout');
     }
     
   };
 
+// ---------- uitbreiding voorbeeld les 5 ---------------- //
+
+
+function getList() {
+    // de data opvragen van de andere server
+
+    var data = {};
+    data.table = "producten";
+    data.bewerking = "get";
+    
+    myApp.request.postJSON(
+        'http://ophalvens.net/mi3/testdb.php', 
+        data, 
+        function(responseData, textStatus, jqXHR) {
+            // responseData is al json omdat we aan postJSON meegaven dat we json verwachten
+            var list = responseData.data;
+            var tlines = "";
+            var i;
+            for ( i = 0; i < list.length; i++) {
+                tlines += "<div class='row'><span class='col'>" + list[i].PR_naam + "</span><span class='col'>"+ list[i].prijs +"</span><button onClick='sendAjax(" + list[i].PR_ID + ");' class='button button-fill button-raised button-small color-orange col'>Verwijder</button> </div>";
+            }
+
+            $$("#pList").html(tlines);
+        },
+        function(responseData, textStatus, errorThrown) {
+            $$("#resultaat").html('POST failed. :' + errorThrown);
+        },
+        "json"
+    );
+    return true;
+}
+
+function sendAjax(id) {
+    // ajax call opzetten om een item te verwijderen.
+    var data = {};
+    data.id = id;
+    data.table = "producten";
+    data.bewerking = "delete";
+    // opgelet : niet doorsturen als JSON :
+    // CORS & json data --> preflight == problemen!
+    // var JSONData = JSON.stringify(data);
+    // Daarom ook geen dataType : 'json' zetten ...
+
+    /* // Syntax met jQuery:
+    $.ajax({
+        type : 'POST',
+        url : 'http://ophalvens.net/mi3/testdb.php',
+        crossDomain : true,
+        data : data,
+        withCredentials : false,
+        success : function(responseData, textStatus, jqXHR) {
+            $$("#resultaat").html("ok!:" + responseData);
+            // refresh de lijst
+            getList();
+        },
+        error : function(responseData, textStatus, errorThrown) {
+            $$("#resultaat").html('POST failed. :' + errorThrown);
+        }
+    });
+    */
+    myApp.request.postJSON(
+        'http://ophalvens.net/mi3/testdb.php',
+        data,
+        function(responseData, textStatus, jqXHR) {
+            myApp.dialog.alert("Die zien we nooit meer ... terug!", "Item verwijderd");
+            // refresh de lijst
+            getList();
+        },
+        function(responseData, textStatus, errorThrown) {
+            myApp.dialog.alert('POST failed. :' + errorThrown, "Item toegevoegd");
+        },
+        "json"
+    );
+
+}
+
+function voegToe(){
+    var data = {};
+    data.table = "producten";
+    data.bewerking = "add";
+    data.PR_naam = $$("#PR_naam").val();
+    data.prijs = $$("#prijs").val();
+    // cat zal fruit of groente zijn
+    var cat = $$('input[name=categorie]:checked').val();
+    // in de databank is fruit 1, groente 2
+    data.PR_CT_ID = (cat == "fruit"?1:2);
+
+    /* // Syntax met jQuery:
+    $.ajax({
+        type : 'POST',
+        url : 'http://ophalvens.net/mi3/testdb.php',
+        crossDomain : true,
+        data : data,
+        withCredentials : false,
+        success : function(responseData, textStatus, jqXHR) {
+             $$("#resultaat").html("ok!:" + responseData);
+            // refresh de lijst
+            getList();
+        },
+        error : function(responseData, textStatus, errorThrown) {
+            $$("#resultaat").html('POST failed. :' + errorThrown);
+        }
+    });
+    */
+    myApp.request.postJSON(
+        'http://ophalvens.net/mi3/testdb.php',
+        data,
+        function(responseData, textStatus, jqXHR) {
+            if(responseData.status === "fail") {
+                myApp.dialog.alert("Sorry, probeer nog een keer met meer data ...", responseData.error);
+            } else {
+                myApp.dialog.alert("ok", "Product toegevoegd");
+            }
+            // refresh de lijst
+            getList();
+        },
+        function(responseData, textStatus, errorThrown) {
+            myApp.dialog.alert('POST failed :' + errorThrown, "Toevoegen is niet gelukt");
+        },
+        "json"
+    );
+}
