@@ -1,54 +1,30 @@
 # MI3-CordovaVoorbeeld
 Voorbeeld voor Cordova - MI3
 
-Dit is de eerste stap in het voorbeeld van de les van vandaag.
+Branch **stap5** is het voorbeeld van **les 5**.
 
-Download deze branch of fork de repository om te starten.
+Deze branch bouwt verder op branch **stap4**. Kijk in die branch voor informatie om dit project op te zetten.
 
-Dit is op dit moment nog een nieuw (default) Cordova project, aangemaakt met het commando :
+## Stap 5
 
-```
-cordova create mi3Cordova18 net.ophalvens.mi3Cordova2018 CordovaVB2018
-```
-## Stap 2
+* **`/www/`**
+  * de code van je Cordova project
+* **`/php/`**
+  * 2 php bestanden die je eigen online webserver moet plaatsen
+  * 2 sql dumps die je in PHPMyAdmin kan importeren om de tabellen van het voorbeeld aan te maken
 
-Voeg het platform android toe aan het project :
+### Geen php bestanden in je Cordova app
+Een php pagina wordt enkel verwerkt als die vanop een webserver met php wordt bevraagd. Hoewel er in het voorbeeld 2 php bestanden in de map `/php` zitten, maken deze bestanden geen deel uit van je Cordova project.
 
-```
-cordova platform add android
-```
+### Je eigen server
+Hoewel je met het voorbeeld van de les kan werken, wil je waarschijnlijk met je eigen code experimenteren voor jouw project.
 
-## Stap 3
+* Zoek een eigen php/mysql server.
+* Plaats een aangepaste versie van `/php/testdb.php` en `/php/dbcon.php` op jouw server. Let daarbij vooral op de aangepaste connectiegegevens in het bestand `/php/dbcon.php`.
+* Voeg de tabellen categorieen en producten toe aan je online databank. In PHPMyAdmin kan je sql bestanden importeren.
+* Pas het bestand `my-app.js` aan, zodat de ajax requests verwijzen naar het bestand `testdb.php` op jouw server.
 
-In stap 3 is het Framework7 framework toegevoegd en is de basis van de app aangepast zodat er een minimum van inhoud is.
+### Meer beveiliging
+Het bestand `/php/testdb.php` is wat langer en meer complex dan de versie die we in een eerdere les gebruikten. Hoewel het bestand nu iets meer complex is om te begrijpen, is deze versie wel wat beter bestand tegen o.a. sqlinjection.
 
-Routing is aangepast en de locatie wordt mogelijk opgevraagd. 
-
-Het effectief opvragen van de locatie zal nog niet werken in appvorm, daarvoor moet eerst nog de location plugin geïnstalleerd worden.
-
-## Stap 4
-
-Om de permissie voor toegang tot de geolocatie van het toestel te regelen, moet de geolocatie plugin geïnstalleerd worden :
-```
-cordova plugin add cordova-plugin-geolocation
-```
-Meer informatie over deze plugin vind je op : https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-geolocation/index.html
-
-Test als je kan de app op je eigen toestel :
-```
-cordova run android
-```
-Als je niet op je eigen toestel kan testen :
-```
-cordova emulate android
-```
-Hiervoor moet je wel al minstens 1 virtueel toestel hebben toegevoegd via bv Android Studio.
-
-Enkele caveats :
-
-* Test eerst of je emulator wel kan opstarten
-* Op sommige versies van je emulator moet je
-  * in het virtuele toestel de developers options unlocken
-  * USB debugging aanzetten (SETTINGS > DEVELOPER OPTIONS)
-  * toestemming geven aan je computer wanneer je virtuele toestel een melding geeft ivm het toestaan van adb toegang naar jouw computer
-
+De aanpassingen zouden voldoende gedocumenteerd moeten zijn. Als de aanpassingen niet duidelijk zijn, laat dan gerust iets weten.
