@@ -38,3 +38,17 @@ Test als je kan de app op je eigen toestel :
 ```
 cordova run android
 ```
+Als je niet op je eigen toestel kan testen :
+```
+cordova emulate android
+```
+Hiervoor moet je wel al minstens 1 virtueel toestel hebben toegevoegd via bv Android Studio.
+
+Enkele caveats :
+
+* Test eerst of je emulator wel kan opstarten
+* Op sommige versies van je emulator moet je
+  * in het virtuele toestel de developers options unlocken
+  * USB debugging aanzetten (SETTINGS > DEVELOPER OPTIONS)
+  * toestemming geven aan je computer wanneer je virtuele toestel een melding geeft ivm het toestaan van adb toegang naar jouw computer
+
